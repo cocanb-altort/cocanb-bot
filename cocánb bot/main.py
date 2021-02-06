@@ -30,7 +30,8 @@ async def unicode(ctx, character):
         response = '0' + response
     else:
         pass
-    await ctx.send('```U+' + response + '```')
+    code = '```U+' + response + '```'
+    await ctx.send(code.upper())
 
 @bot.command(name='time', help='Shows current time given a timezone (In (-)HH:MM format)')
 async def time (ctx, timezone):
@@ -38,10 +39,12 @@ async def time (ctx, timezone):
   future_time = datetime.today() + timedelta(hours=hours)
   if timezone == '00:00':
     plus = '±'
-  elif timezone[0] != '-':
-    plus = '+'
-  else:
+  elif timezone[0] == '-':
     plus = ''
+  elif timezone[0] == '+':
+    plus = ''
+  else:
+    plus = '+'
   week_day = future_time.weekday()
   weekdays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
   week_day = weekdays[week_day]
