@@ -1,0 +1,79 @@
+import discord
+from discord.ext import commands
+
+import os
+from dotenv import load_dotenv
+
+from unicodedata import *
+
+from datetime import datetime, timedelta
+from time import localtime, strftime
+import time
+
+from replit import db
+from keep_alive import keep_alive
+
+from cocanb import Cocanb
+from unicode import Unicode
+from acknowledgements import Acknowledgements
+
+load_dotenv()
+TOKEN = os.getenv('TOKEN')
+
+bot = commands.Bot(command_prefix='*', description='A bot for members of the Cocánb')
+
+@bot.event
+async def on_ready():
+  await bot.change_presence(activity=discord.Game(name="*help"))
+
+@bot.command(name='time', help='Shows current time given a timezone (In (-)HH:MM format)')
+async def time (ctx, timezone: str='00:00'):
+  if timezone[0] == '-':
+    hours = int(timezone[:-3])-int(timezone[-2:])/60
+  else:
+    hours = int(timezone[:-3])+int(timezone[-2:])/60
+  future_time = datetime.today() + timedelta(hours=hours)
+  if timezone == '00:00':
+    plus = '±'
+  elif timezone[0] == '-':
+    plus = ''
+  elif timezone[0] == '+':
+    plus = ''
+  else:
+    plus = '+'
+  week_day = future_time.weekday()
+  weekdays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
+  week_day = weekdays[week_day]
+  if timezone[-3] == ':':
+    await ctx.send('`' + week_day + ', ' + str(future_time) + ', UTC' + plus + timezone + '`')
+  else:
+    pass
+
+@bot.command (name="return", help="Returns message")
+async def msgreturn(ctx, *, msg):
+  await ctx.send (msg)
+
+@bot.command (name="emoji", help="Sends some emojis\nSupported: amogus/amongus/among us, barry, biang, bruh/facepalm, surprised/that's illgal/illegal\n(words separated by / output the same emoji)")
+async def emoji (ctx, *, name):
+  name = name.lower()
+  if name == "ye":
+    await ctx.send ("<:ye:799291949273317377>")
+  elif name == "amogus" or name == "amongus" or name == "among us":
+    await ctx.send ("<:amogus:809427238784860210>")
+  elif name == "barry":
+    await ctx.send ("<:barry:811154017672757270>")
+  elif name == "biang":
+    await ctx.send ("<:biang:809669658143227905>")
+  elif name == "bruh" or name == "facepalm":
+    await ctx.send ("<:bruh:801100506251526145>")
+  elif name == "surprised" or name == "that's illegal" or name == "illegal":
+    await ctx.send ("<:surprised:801099678988501072>")
+  else:
+    await ctx.send ("Invalid emoji")
+
+bot.add_cog(Cocanb(bot))
+bot.add_cog(Unicode(bot))
+bot.add_cog(Acknowledgements(bot))
+
+keep_alive()
+bot.run(TOKEN)
