@@ -53,7 +53,12 @@ async def time (ctx, timezone: str='00:00'):
 async def msgreturn(ctx, *, msg):
   await ctx.send (msg)
 
-@bot.command (name="emoji", help="Sends some emojis\nSupported: amogus/amongus/among us, barry, biang, bruh/facepalm, surprised/that's illgal/illegal\n(words separated by / output the same emoji)")
+@bot.command (name="delreturn", help="Returns message (deletes original message)\n(may not work on every server)")
+async def delmsgreturn(ctx, *, msg):
+  await ctx.message.delete ()
+  await ctx.send (msg)
+
+@bot.command (name="emoji", help="Sends some emojis\nSupported: amogus/amongus/among us, barry, biang, bruh/facepalm, surprised/that's illgal/illegal, void, woah\n(words separated by / output the same emoji)")
 async def emoji (ctx, *, name):
   name = name.lower()
   if name == "ye":
@@ -68,6 +73,10 @@ async def emoji (ctx, *, name):
     await ctx.send ("<:bruh:801100506251526145>")
   elif name == "surprised" or name == "that's illegal" or name == "illegal":
     await ctx.send ("<:surprised:801099678988501072>")
+  elif name == "void":
+    await ctx.send ("<:void:798150976191201313>")
+  elif name == "woah":
+    await ctx.send ("<:woah:807905973162999818>")
   else:
     await ctx.send ("Invalid emoji")
 
